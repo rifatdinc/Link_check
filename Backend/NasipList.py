@@ -6,4 +6,10 @@ def RouterIp():
     cursor = connection.cursor()
     cursor.execute('Select Bip From bras ORDER BY Bip DESC')
     result = cursor.fetchall()
-    return result
+    Word = []
+    for x_ in result:
+        for s in x_:
+            Word.append(s.decode())
+
+    return Word
+

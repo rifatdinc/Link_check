@@ -25,6 +25,3 @@ def Getbras(nas, ip, device):
 dene = verboseS()
 
 
-dene.getLinkBrand('Ip Adresiniz')
-print(getSelect('Gozlemen2', 'mimosa')
-
