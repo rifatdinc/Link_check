@@ -8,7 +8,7 @@ from pathlib import Path
 
 def ftpDownload(filesname,ip):
     ftp = FTP(ip)
-    ftp.login('admin','mc4152')
+    ftp.login('admin','password')
 
     # Get All Files
     files = ftp.nlst(filesname)
