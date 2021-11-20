@@ -6,8 +6,8 @@ from hurry.filesize import size, alternative
 
 
 def DatabaseIp60ghz():
-    connection = mysql.connector.connect(host="192.168.192.2", user="root", password="As081316",
-                                         database="PoyrazwifiVerici", auth_plugin='mysql_native_password')
+    connection = mysql.connector.connect(host="127.0.0.1", user="root", password="Password",
+                                         database="Link_DB", auth_plugin='mysql_native_password')
     cursor = connection.cursor()
     cursor.execute(
         'Select distinct ip From tblLink WHERE type="RBLHGG-60ad" ORDER BY ip')
@@ -24,7 +24,7 @@ def DatabaseIp60ghz():
 def Mik60ghz(ip):
     try:
 
-        Apir = Api(ip, "admin", '400HM14293')
+        Apir = Api(ip, "admin", 'Password')
     except Exception as err:
         print('asdkas=-----------------', err)
 
@@ -109,7 +109,7 @@ def Mik60ghz(ip):
 
 
 def GetcurrentData(ip):
-    Data = Api(ip, 'admin', '400HM14293')
+    Data = Api(ip, 'admin', 'Password')
     # print()
     getRequest = Data.talk(
         '/interface/monitor-traffic\n=interface=ether1\n=once=')
