@@ -10,7 +10,7 @@ except ImportError:
     from ubntapi import Ubntos
 ### -- Mysql Ip List
 def qetsql(Nasselect):
-    connection = mysql.connector.connect(host="192.168.192.2", user="root", password="As081316",
+    connection = mysql.connector.connect(host="127.0.0.1", user="root", password="Password",
                                          database="PoyrazwifiVerici", auth_plugin='mysql_native_password')
     cursor = connection.cursor()
     cursor.execute(
