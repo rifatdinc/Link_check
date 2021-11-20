@@ -17,9 +17,9 @@ class Mikrotik():
     def FirstApi(self, ip):
         try:
 
-            self.Apir = Api(ip, "admin", '400HM14293')
+            self.Apir = Api(ip, "admin", 'Password')
         except Exception as err:
-            print('Giristeki Exeption Hatasi------', err)
+            print('Expection Login error------', err)
 
         interface = self.Apir.talk('/interface/getall')
 
@@ -165,7 +165,7 @@ class Mikrotik():
     def GetcurrentData(self, ip):
         try:
 
-            Data = Api(ip, 'admin', '400HM14293')
+            Data = Api(ip, 'admin', 'Password')
 
             getRequest = Data.talk(
                 '/interface/monitor-traffic\n=interface=wlan1\n=once=')
@@ -186,7 +186,7 @@ class Mikrotik():
         return results[ip]['ports'][0]['state']
 
     def Databaseqets(self, Qstring, queryStriq):
-        connection = mysql.connector.connect(host="192.168.192.2", user="root", password="As081316",
+        connection = mysql.connector.connect(host='127.0.0.1', user="root", password="Password",
                                              database="PoyrazwifiVerici", auth_plugin='mysql_native_password')
         cursor = connection.cursor()
         cursor.execute(
