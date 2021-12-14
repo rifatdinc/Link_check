@@ -24,7 +24,7 @@ class Ubntos():
         ]
     
 
-    def RSession(self, ip):
+    async def RSession(self, ip):
         self.responses_by_ip = {}
         with ThreadPoolExecutor(max_workers=100) as executor:
             with requests.Session()as session:

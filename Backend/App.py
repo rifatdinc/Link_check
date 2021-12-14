@@ -14,23 +14,23 @@ import asyncio
 import json
 app = Flask(__name__)
 CORS(app)
+
 Obj = SnmpSignal()
 
 @app.route('/nasdata')
 def gets():
     return json.dumps(sql())
 
-@app.route('/Speaksignal',methods=['POST'])
+@app.route('/Speaksignal',methods=['GET'])
 def SpeaksSignals():
-    data = json.loads(request.data.decode())
 
-    Dot1 = Obj.Lstenpoint(data["IpaddressSpeak"])
+    Dot1 = Obj.Lstenpoint("10.104.1.21")
     return json.dumps(Dot1)
 
 @app.route('/getdatasql', methods=["POST"])
 def sardata():
 
-    data = json.loads(request.data.decode())
+    data = json.loads(request.data)
 
     Pors = DatabaseIp('mimosa', data['Clickdata'])
     
@@ -42,7 +42,7 @@ def sardata():
 @app.route('/mikrotik', methods=['POST'])
 def Mikrotikdata():
     m = Mikrotik()
-    data = json.loads(request.data.decode())
+    data = json.loads(request.data)
     Data = m.LastFunc('mikrotik', data['Clicks'].replace(" ",""))
     return json.dumps(Data)
 
@@ -61,14 +61,14 @@ def ubnt60():
 
 @app.route('/ubnt5gHz', methods=['POST'])
 def ubnt5ghz_():
-    data = json.loads(request.data.decode())
+    data = json.loads(request.data)
     Data = lastubntendpoint(data['Clicks'].replace(" ",""))
     return json.dumps(Data)
 
 
 @app.route('/signalscan',methods=['POST'])
 def signalscan():
-    data = json.loads(request.data.decode())
+    data = json.loads(request.data)
     signaldata = SignalTarama.Signalscan(data['Data'])
     return json.dumps(signaldata)
 
@@ -77,14 +77,14 @@ def signalscan():
 
 @app.route('/scanconnect',methods=['POST'])
 def scanconnect():
-    data = json.loads(request.data.decode())
+    data = json.loads(request.data)
     S = qscancon(data['Ipadress'],data['Accespoint'],data['Frequency'],data['pppoename'])
     return json.dumps(S)
 
 
 @app.route('/realdatascan',methods=['POST'])
 def realdatascan():
-    data = json.loads(request.data.decode())
+    data = json.loads(request.data)
     Costumerinfo = SignalTarama.CostumeInfo(data["Ipadress"])
     return json.dumps(Costumerinfo)
 

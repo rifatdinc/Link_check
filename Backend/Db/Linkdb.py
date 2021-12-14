@@ -1,3 +1,4 @@
+
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 app = Flask(__name__)
@@ -17,14 +18,9 @@ class nas(db.Model):
     nasuser = db.Column(db.String, nullable=False)
     nasspasswd = db.Column(db.String, nullable=False)
 
-# class switch(db.Model):
-#     pass
 
 
-# class ap(db.Model):
-#     pass
-
-class mac_vendor(db.Model):
+class macaddrs(db.Model):
     id = db.Column(db.Integer, primary_key=True,
                 unique=True, autoincrement=True)
     mac = db.Column(db.String,nullable=False)

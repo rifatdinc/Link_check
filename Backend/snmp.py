@@ -68,6 +68,7 @@ async def Snmpdata(ip):
                 task = asyncio.ensure_future(
                     Apisnmp(res))
                 getlist.append(task)
+                
             view = await asyncio.gather(*getlist)
         try:
             mimosaName = view

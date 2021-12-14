@@ -9,7 +9,7 @@ import asyncio
 import aiohttp
 from requests.api import head
 try:
-        
+
     from requests.packages.urllib3.exceptions import InsecureRequestWarning
     from requests.sessions import Session, session
     requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -39,11 +39,11 @@ class Ubntos():
                 data={
                     'username': 'ubnt',
                     'password': 'Mc4152..'
-                },verify=False,
+                }, verify=False,
                 timeout=5)
             self.responses = {}
             for url in self.urlsapi(ip):
-                r = s.get(url=url,verify=False)
+                r = s.get(url=url, verify=False)
 
                 self.responses.update(
                     {"Ip": ip, "Data1": r.json() if r.status_code == 200 else r.status_code})
@@ -81,4 +81,5 @@ class Ubntos():
         return kls
 
 
-m = Ubntos()
+if __name__ == '__main__':
+    Ubntos()
