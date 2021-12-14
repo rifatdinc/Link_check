@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './Component/App';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
-import './style/main.scss'
-import 'semantic-ui-css/semantic.min.css'
+import './styles/main.scss';
 
 ReactDOM.render(
     <App />,
