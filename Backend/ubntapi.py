@@ -38,8 +38,13 @@ class Ubntos():
                 url=self.ubntAuth(ip),
                 data={
                     'username': 'ubnt',
+<<<<<<< HEAD
                     'password': 'Mc4152..'
                 }, verify=False,
+=======
+                    'password': 'Password'
+                },verify=False,
+>>>>>>> fab32dc4c47bbd3a6ea2f71e6a0f106602f28d0f
                 timeout=5)
             self.responses = {}
             for url in self.urlsapi(ip):

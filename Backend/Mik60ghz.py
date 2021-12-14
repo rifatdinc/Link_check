@@ -3,12 +3,11 @@ from typing import List
 from routeros_api import Api
 import mysql.connector
 from hurry.filesize import size, alternative
-from concurrent.futures import ThreadPoolExecutor
 
 
 def DatabaseIp60ghz():
-    connection = mysql.connector.connect(host="192.168.192.2", user="root", password="As081316",
-                                         database="PoyrazwifiVerici", auth_plugin='mysql_native_password')
+    connection = mysql.connector.connect(host="127.0.0.1", user="root", password="Password",
+                                         database="Link_DB", auth_plugin='mysql_native_password')
     cursor = connection.cursor()
     cursor.execute(
         'Select distinct ip From tblLink WHERE type="RBLHGG-60ad" ORDER BY ip')
@@ -25,7 +24,7 @@ def DatabaseIp60ghz():
 def Mik60ghz(ip):
     try:
 
-        Apir = Api(ip, "admin", '400HM14293')
+        Apir = Api(ip, "admin", 'Password')
     except Exception as err:
         print('asdkas=-----------------', err)
 
@@ -74,7 +73,7 @@ def Mik60ghz(ip):
         uptime = rr['uptime']
         boardname = rr['board-name']
         cpu1 = rr['cpu-load']
-    return {
+    return [{
         # 'ActiveUser': activeUser,
         # "Ip_Addres": ipads,
         "Interface": interface,
@@ -106,11 +105,11 @@ def Mik60ghz(ip):
             'Wireless_MacAdress': wMacAd,
             'Wireless_Running': wRunning,
         }]
-    }
+    }]
 
 
 def GetcurrentData(ip):
-    Data = Api(ip, 'admin', '400HM14293')
+    Data = Api(ip, 'admin', 'Password')
     # print()
     getRequest = Data.talk(
         '/interface/monitor-traffic\n=interface=ether1\n=once=')
@@ -120,32 +119,20 @@ def GetcurrentData(ip):
         # print(Tx,Rx)
         return {"Tx": Tx, "Rx": Rx}
 
-# def Lastendpoint():
-#     Ipdata = DatabaseIp60ghz()
-#     Lists = []
-#     for x in Ipdata:
-#         # print(x)
-#         L = Mik60ghz(x)
-#         # print(L)
-#         for Ls in L:
-#             # print(Ls)
-#             Lists.append(Ls)
-            
-#         # Lists.append(L)
-            
-#     return Lists
-
-
 def Lastendpoint():
-    kls = []
-    with ThreadPoolExecutor() as executor:
-        result = executor.map(Mik60ghz, DatabaseIp60ghz())
-        for x in result:
-            kls.append(x)
-
-    return kls
-
-
-
+    Ipdata = DatabaseIp60ghz()
+    Lists = []
+    for x in Ipdata:
+        # print(x)
+        L = Mik60ghz(x)
+        # print(L)
+        for Ls in L:
+            # print(Ls)
+            Lists.append(Ls)
+            
+        # Lists.append(L)
+            
+    return Lists
+print(Lastendpoint())
 
     # ["10.124.7.9","10.121.2.3"]

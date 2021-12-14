@@ -28,8 +28,8 @@ import json
 import nmap3
 
 def sql():
-    connection = mysql.connector.connect(host="192.168.192.2", user="root", password="As081316",
-                                              database="PoyrazwifiVerici", auth_plugin='mysql_native_password')
+    connection = mysql.connector.connect(host="127.0.0.1", user="root", password="Password",
+                                              database="LinkSnmp", auth_plugin='mysql_native_password')
     cursor = connection.cursor()
     cursor.execute(
         'Select Bname From bras ORDER BY Bname')
@@ -139,8 +139,8 @@ async def Apisnmp(res):
 
 
 def DatabaseIp(Qstring, queryStriq):
-    connection = mysql.connector.connect(host="192.168.192.2", user="root", password="As081316",
-                                              database="PoyrazwifiVerici", auth_plugin='mysql_native_password')
+    connection = mysql.connector.connect(host="127.0.0.1", user="root", password="Password",
+                                              database="LinkSnmp", auth_plugin='mysql_native_password')
     cursor = connection.cursor()
     cursor.execute(
         'Select ip From tblLink WHERE device="'+Qstring+'" and nas="'+queryStriq+'"  ORDER BY ip')

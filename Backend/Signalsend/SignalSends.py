@@ -35,7 +35,12 @@ class SnmpSignal:
         Bu Fonksiyonun yaptigi islem snmp ile bilgileri alip cozumleme yapiyor.
         """
         try:
+<<<<<<< HEAD
             sa = Api(ip, "admin", "400HM14293")
+=======
+
+            sa = Api(ip, 'admin', 'password')
+>>>>>>> fab32dc4c47bbd3a6ea2f71e6a0f106602f28d0f
         except Exception as Err:
             print(Err, "Giris Kismindaki Hata")
         sa.talk("/snmp/set\n=enabled=yes")
@@ -114,8 +119,8 @@ class SnmpSignal:
 
     def MacAdresFind(self,Mac):
 
-        connection = mysql.connector.connect(host="192.168.192.2", user="root", password="As081316",
-                                            database="PoyrazwifiVerici", auth_plugin='mysql_native_password')
+        connection = mysql.connector.connect(host="127.0.0.1", user="root", password="Password",
+                                            database="Link_Database", auth_plugin='mysql_native_password')
         cursor = connection.cursor()
         cursor.execute(
             'Select Name From MacToName WHERE MAC="'+Mac+'"')

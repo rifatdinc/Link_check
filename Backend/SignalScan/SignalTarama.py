@@ -41,7 +41,7 @@ def Resultend(text):
 
 
 def CostumeInfo(ip):
-    R1s = routeros_api.Api(ip, "admin", 'mc4152')
+    R1s = routeros_api.Api(ip, "admin", 'password')
     ppoename = R1s.talk('/interface/pppoe-client/print')[0]['user']
     signal = R1s.talk('/interface/wireless/print')[0]
     signals = R1s.talk(
@@ -61,7 +61,7 @@ def CostumeInfo(ip):
 
 
 def Signalscan(ip):
-    R1 = routeros_api.Api(ip, "admin", 'mc4152')
+    R1 = routeros_api.Api(ip, "admin", 'password')
     ppoename = R1.talk('/interface/pppoe-client/print')[0]['user']
     R1.talk('/interface/wireless/scan\n=number=wlan1\n=duration=45\n=save-file='+ppoename+'.txt')
     ftpDownload(ppoename+".txt", ip)

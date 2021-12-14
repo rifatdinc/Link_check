@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 def qscancon(ipadres,accespoint,frequency,ppoeadress):
-    r = Api(ipadres,'admin','mc4152')
+    r = Api(ipadres,'admin','password')
     getcurend = os.path.realpath(__file__)
     path = Path(getcurend)
     ################## TRY BLOKLARINI SIL
