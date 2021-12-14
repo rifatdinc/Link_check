@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from Setup.Setup import SetupMethod
+from Setup.Setups import SetupMethod
 from Setup.mac_db import Macdb
 from Models.Getmac import Classmac
 from Db.Linkdb  import db
