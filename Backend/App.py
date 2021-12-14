@@ -8,7 +8,7 @@ from ubntapi import Ubntos
 from SignalScan import SignalTarama
 from SignalScan.Connectscan import qscancon
 from Ubnt5 import lastubntendpoint
-from Signalsend.SignalSends import SnmpSignal
+from Signalsend.SignalSend import SnmpSignal
 import aiosnmp
 import asyncio
 import json
