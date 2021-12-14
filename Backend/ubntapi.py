@@ -8,11 +8,15 @@ import os
 from requests.api import head
 <<<<<<< Updated upstream
 try:
+<<<<<<< HEAD
         
 =======
 
 try:
 >>>>>>> Stashed changes
+=======
+
+>>>>>>> main
     from requests.packages.urllib3.exceptions import InsecureRequestWarning
     requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -43,8 +47,13 @@ class Ubntos:
 <<<<<<< Updated upstream
                 data={
                     'username': 'ubnt',
+<<<<<<< HEAD
+                    'password': 'Mc4152..'
+                }, verify=False,
+=======
                     'password': 'Password'
                 },verify=False,
+>>>>>>> fab32dc4c47bbd3a6ea2f71e6a0f106602f28d0f
                 timeout=5)
 =======
                 data={"username": self.user, "password": self.ubntpwd},
@@ -54,7 +63,7 @@ class Ubntos:
 >>>>>>> Stashed changes
             self.responses = {}
             for url in self.urlsapi(ip):
-                r = s.get(url=url,verify=False)
+                r = s.get(url=url, verify=False)
 
                 self.responses.update(
                     {
@@ -96,9 +105,14 @@ class Ubntos:
         return kls
 
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 m = Ubntos()
 =======
 if __name__ == "__main__":
     Ubntos()
 >>>>>>> Stashed changes
+=======
+if __name__ == '__main__':
+    Ubntos()
+>>>>>>> main

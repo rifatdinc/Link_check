@@ -2,14 +2,12 @@
 import aiosnmp
 import asyncio
 import subprocess
-from routeros_api import Api
+from aiosnmp.exceptions import SnmpTimeoutError
+from aiosnmp.message import SnmpVersion
+
 import requests
+from routeros_api import Api
 import mysql.connector
-<<<<<<< Updated upstream
-
-class SnmpSignal():
-
-=======
 from ubntapi import Ubntos
 import binascii
 import os
@@ -21,16 +19,18 @@ class SnmpSignal:
         self.dbpasswd = os.environ.get("dbpasswd")
         self.dbhost = os.environ.get("host")
         self.dbdatabase = os.environ.get("dbdatabase")
->>>>>>> Stashed changes
     async def SnmpMimosa(self, ip):
         try:
             degerler = []
-            async with aiosnmp.Snmp(host=ip, port=161, community="public") as snmp:
+            async with aiosnmp.Snmp(host=ip, version=SnmpVersion.v1) as snmp:
 
-                for res in await snmp.get(['1.3.6.1.4.1.43356.2.1.2.1.1.0',
-                                           '1.3.6.1.4.1.43356.2.1.2.6.1.1.3.1',
-                                           '1.3.6.1.4.1.43356.2.1.2.6.1.1.3.2',
-                                           ]):
+                for res in await snmp.get(
+                    [
+                        "1.3.6.1.4.1.43356.2.1.2.1.1.0",
+                        "1.3.6.1.4.1.43356.2.1.2.6.1.1.3.1",
+                        "1.3.6.1.4.1.43356.2.1.2.6.1.1.3.2",
+                    ]
+                ):
                     degerler.append(res.value)
             return degerler
         except Exception as err:
@@ -40,73 +40,79 @@ class SnmpSignal:
         """
         Bu Fonksiyonun yaptigi islem snmp ile bilgileri alip cozumleme yapiyor.
         """
-        ip = ip
         try:
-<<<<<<< Updated upstream
-
-            sa = Api(ip, 'admin', 'password')
-=======
             sa = Api(ip, "admin", self.linkpwd)
->>>>>>> Stashed changes
         except Exception as Err:
             print(Err, "Giris Kismindaki Hata")
-        sa.talk('/snmp/set\n=enabled=yes')
+        sa.talk("/snmp/set\n=enabled=yes")
+
+        routermodel = sa.talk("/system/routerboard/print")[0]
+        if routermodel["model"] == "RBLHGG-60ad":
+            return sa.talk("/interface/w60g/monitor\n=numbers=wlan60-1\n=once=")[0][
+                "rssi"
+            ]
         Tx_ChainsZero = sa.talk(
-            '/interface/wireless/registration-table/print\n=.proplist=signal-strength-ch0.oid')
+            "/interface/wireless/registration-table/print\n=.proplist=signal-strength-ch0.oid"
+        )
         Tx_ChainsOne = sa.talk(
-            '/interface/wireless/registration-table/print\n=.proplist=signal-strength-ch1.oid')
+            "/interface/wireless/registration-table/print\n=.proplist=signal-strength-ch1.oid"
+        )
 
         for x in Tx_ChainsZero:
-            signal0 = (x['signal-strength-ch0.oid'])
+            signal0 = x["signal-strength-ch0.oid"]
         for xs in Tx_ChainsOne:
-            signal1 = (xs['signal-strength-ch1.oid'])
+            signal1 = xs["signal-strength-ch1.oid"]
 
         self.degerler = []
-        async with aiosnmp.Snmp(host=ip, port=161, community="public") as snmp:
+        async with aiosnmp.Snmp(
+            host=ip, port=161, community="public", version=SnmpVersion.v1
+        ) as snmp:
             for res in await snmp.get([signal0, signal1]):
                 self.degerler.append(str(res.value))
         return self.degerler
 
     def SnmpUbnt(self, ip):
-        shell = subprocess.run(['snmpwalk', '-c', 'public', '-v', '1', ''+ip+'',
-                               '.1.3.6.1.4.1.41112.1.4.5.1.5'], check=True, capture_output=True)
-        Ubuquiti = shell.stdout.decode()
-        DataUbnt = Ubuquiti.split(":")[1][2:4]
-        return [DataUbnt]
+        ubnt = Ubntos()
+        Data = ubnt.RSession(ip)
+        return Data["Data"]['Data1']['wireless']["sta"][0]['signal']
 
-    def SnmpCompanyName(self, ip):
-        shell = subprocess.run(['snmpwalk', '-c', 'public', '-v', '1', ''+ip+'',
-                                '1.3.6.1.2.1.2.2.1.6.2'], check=True, capture_output=True)
-        udpPort = shell.stdout.decode()
-        PureSnmp = udpPort.split(":")[1]
-        Puremac = self.MacAdresFind(PureSnmp.replace(" ","")[0:6])
-        return Puremac
-        
-        # -- Api vendors kullanmiyorum 1000 request'dan sonra cevap vermiyor.
+    async def SnmpCompanyName(self, ip) -> str:
+        async with aiosnmp.Snmp(host=ip,port=161,community="public",) as snmp:
+            try:
+                for res in await snmp.get([".1.3.6.1.2.1.2.2.1.6.2"]):
+                    return self.MacAdresFind(binascii.hexlify(res.value).decode()[0:6].upper())
 
-    # def MacAdresFindVendor(self, macAdres):
-    #     url = "https://api.macvendors.com/"
-    #     response = requests.get(url+macAdres)
-    #     return(response.content.decode())
+            except SnmpTimeoutError:
+                #The Ubuqiti Network is returning the SnmpTimeoutError error "No Response" on the device
+                shell = subprocess.run(["snmpwalk",
+                        "-c",
+                        "public",
+                        "-v",
+                        "1",
+                        "" + ip + "",
+                        ".1.3.6.1.2.1.2.2.1.6.2",
+                    ],
+                    check=True,
+                    capture_output=True,
+                )
+                Ubuquiti = shell.stdout.decode()
+                return self.MacAdresFind(Ubuquiti.split("=")[1].split("G")[1].replace(" ","").replace("\n","").replace(":","")[0:6].upper())
+               
 
     def Lstenpoint(self, ip):
-        Company = self.SnmpCompanyName(ip)
-        if "Ubiquiti Networks Inc" in Company:
+        Company = asyncio.run(self.SnmpCompanyName(ip))
+
+        if "Ubiquiti Networks Inc." == Company:
             return self.SnmpUbnt(ip)
-        elif "Mimosa Networks" in Company:
+        elif "Mimosa Networks" == Company:
             AsyncMimosa = asyncio.run(self.SnmpMimosa(ip))
+            print(AsyncMimosa)
             Asynm = str(AsyncMimosa[1])[1:3]
             return [Asynm]
-<<<<<<< Updated upstream
-
-        elif "Routerboard.com" in Company:
-            return asyncio.run(self.SnmpMikrotik(ip))
-=======
         elif "Routerboard.com" == Company:
             return asyncio.run(self.SnmpMikrotik(ip))
         else:
             return "Vendor is not defined"
->>>>>>> Stashed changes
 
     def MacAdresFind(self,Mac):
 
@@ -124,7 +130,7 @@ class SnmpSignal:
     # "Routerboard.com"
     # Mimosa Networks"
 ]
-# Obj = SnmpSignal()
+Obj = SnmpSignal()
 
-# Dot1 = Obj.SnmpCompanyName('10.101.2.11')
-# print(Dot1)
+Dot1 = Obj.Lstenpoint("10.104.1.21")
+print(Dot1)
