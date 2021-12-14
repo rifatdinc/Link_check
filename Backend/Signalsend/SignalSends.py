@@ -5,9 +5,23 @@ import subprocess
 from routeros_api import Api
 import requests
 import mysql.connector
+<<<<<<< Updated upstream
 
 class SnmpSignal():
 
+=======
+from ubntapi import Ubntos
+import binascii
+import os
+
+class SnmpSignal:
+    def __init__(self):
+        self.linkpwd = os.environ.get("linpaswd")
+        self.dbuser = os.environ.get("dbuser")
+        self.dbpasswd = os.environ.get("dbpasswd")
+        self.dbhost = os.environ.get("host")
+        self.dbdatabase = os.environ.get("dbdatabase")
+>>>>>>> Stashed changes
     async def SnmpMimosa(self, ip):
         try:
             degerler = []
@@ -20,7 +34,7 @@ class SnmpSignal():
                     degerler.append(res.value)
             return degerler
         except Exception as err:
-            print(err)
+            return err
 
     async def SnmpMikrotik(self, ip):
         """
@@ -28,8 +42,12 @@ class SnmpSignal():
         """
         ip = ip
         try:
+<<<<<<< Updated upstream
 
             sa = Api(ip, 'admin', 'password')
+=======
+            sa = Api(ip, "admin", self.linkpwd)
+>>>>>>> Stashed changes
         except Exception as Err:
             print(Err, "Giris Kismindaki Hata")
         sa.talk('/snmp/set\n=enabled=yes')
@@ -79,14 +97,21 @@ class SnmpSignal():
             AsyncMimosa = asyncio.run(self.SnmpMimosa(ip))
             Asynm = str(AsyncMimosa[1])[1:3]
             return [Asynm]
+<<<<<<< Updated upstream
 
         elif "Routerboard.com" in Company:
             return asyncio.run(self.SnmpMikrotik(ip))
+=======
+        elif "Routerboard.com" == Company:
+            return asyncio.run(self.SnmpMikrotik(ip))
+        else:
+            return "Vendor is not defined"
+>>>>>>> Stashed changes
 
     def MacAdresFind(self,Mac):
 
-        connection = mysql.connector.connect(host="127.0.0.1", user="root", password="Password",
-                                            database="Link_Database", auth_plugin='mysql_native_password')
+        connection = mysql.connector.connect(host=self.dbhost, user=self.dbuser, password=self.dbpasswd,
+                                            database=self.dbdatabase, auth_plugin='mysql_native_password')
         cursor = connection.cursor()
         cursor.execute(
             'Select Name From MacToName WHERE MAC="'+Mac+'"')

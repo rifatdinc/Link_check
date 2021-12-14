@@ -25,8 +25,25 @@ class SetupMethod:
         Ip_v4 = data['address']
         Mac = data['mac-address']
         Intf = data['interface']
+<<<<<<< Updated upstream
         print(Ip_v4,Mac,Intf)
         
+=======
+        result = class_mac.getMac(Mac)
+        if result == "Routerboard.com":
+            if self.Mikrotikdb(address, username, password) == "ap-bridge":
+                # Burasi multi point yani acces point
+                pass
+            elif self.Mikrotikdb(address, username, password)  == 'bridge':
+                # Burasi Link cihazi
+                pass
+            elif self.Mikrotikdb(address,username,password) == "station-bridge":
+                pass
+                # burasida client cihazidir
+        
+            # Results.append({"ip_v4": Ip_v4, "result": result, "interface": Intf})
+
+>>>>>>> Stashed changes
     def portActive(self, Ip_adres, port="8728"):
         result = nmap.nmap_portscan_only(Ip_adres, args="-p "+port+"")
         b = result[Ip_adres]['ports']
