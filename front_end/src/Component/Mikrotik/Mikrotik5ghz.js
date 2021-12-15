@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { List, Card, Row, Col } from 'antd';
 import WifiIndicator, { DBMToSignalStrength } from 'react-wifi-indicator';
 import { Grid, Menu, Segment } from 'semantic-ui-react'
-import Axiosproces from './Axioss/Axiosprocess'
+import Axiosproces from '../ManageRequest/Axiosps';
 
 const Mikrotik = () => {
     const [Mikda, setMikda] = useState([])

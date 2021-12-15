@@ -1,7 +1,6 @@
-/* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react'
 import Speech from 'react-speech';
-import Axiosps from '../Axioss/Axiosprocess'
+import Axiosps from '../ManageRequest/Axiosps'
 import { Input, Form, Button } from 'antd';
 
 const Zorlakonusutur = () => {

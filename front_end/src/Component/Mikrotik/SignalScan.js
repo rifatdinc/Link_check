@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Input ,message, Button, Table, Form, Row } from 'antd'
-import axios from 'axios'
+import axios from 'axios';
 
-const Signalscan = () => {
+const SignalScan = () => {
     const [data, setdata] = useState([])
     const [Scanreal, setScanreal] = useState([])
     const [selectionType] = useState('radio');
@@ -193,7 +193,7 @@ const Signalscan = () => {
     )
 }
 
-export default Signalscan
+export default SignalScan
 
 
 // // {console.log(data)}

@@ -6,6 +6,7 @@ from aiosnmp.exceptions import SnmpTimeoutError
 from aiosnmp.message import SnmpVersion
 
 import requests
+from Db.PoyrazLink import Poyrazdb
 from routeros_api import Api
 import mysql.connector
 from ubntapi import Ubntos
@@ -13,17 +14,11 @@ import binascii
 import os
 
 class SnmpSignal:
-    def __init__(self):
-        self.linkpwd = os.environ.get("linpaswd")
-        self.dbuser = os.environ.get("dbuser")
-        self.dbpasswd = os.environ.get("dbpasswd")
-        self.dbhost = os.environ.get("host")
-        self.dbdatabase = os.environ.get("dbdatabase")
+    Pn = Poyrazdb()
     async def SnmpMimosa(self, ip):
         try:
             degerler = []
             async with aiosnmp.Snmp(host=ip, version=SnmpVersion.v1) as snmp:
-
                 for res in await snmp.get(
                     [
                         "1.3.6.1.4.1.43356.2.1.2.1.1.0",
@@ -48,9 +43,7 @@ class SnmpSignal:
 
         routermodel = sa.talk("/system/routerboard/print")[0]
         if routermodel["model"] == "RBLHGG-60ad":
-            return sa.talk("/interface/w60g/monitor\n=numbers=wlan60-1\n=once=")[0][
-                "rssi"
-            ]
+            return sa.talk("/interface/w60g/monitor\n=numbers=wlan60-1\n=once=")[0]["rssi"]
         Tx_ChainsZero = sa.talk(
             "/interface/wireless/registration-table/print\n=.proplist=signal-strength-ch0.oid"
         )
@@ -96,7 +89,7 @@ class SnmpSignal:
                     capture_output=True,
                 )
                 Ubuquiti = shell.stdout.decode()
-                return self.MacAdresFind(Ubuquiti.split("=")[1].split("G")[1].replace(" ","").replace("\n","").replace(":","")[0:6].upper())
+                return self.Pn.MacAdresFind(Ubuquiti.split("=")[1].split("G")[1].replace(" ","").replace("\n","").replace(":","")[0:6].upper())
                
 
     def Lstenpoint(self, ip):
@@ -114,17 +107,7 @@ class SnmpSignal:
         else:
             return "Vendor is not defined"
 
-    def MacAdresFind(self,Mac):
 
-        connection = mysql.connector.connect(host=self.dbhost, user=self.dbuser, password=self.dbpasswd,
-                                            database=self.dbdatabase, auth_plugin='mysql_native_password')
-        cursor = connection.cursor()
-        cursor.execute(
-            'Select Name From MacToName WHERE MAC="'+Mac+'"')
-        res = cursor.fetchall()
-        for d in res : 
-            for scx in d:
-                return scx.decode()
 [
     # Ubiquiti Networks Inc
     # "Routerboard.com"

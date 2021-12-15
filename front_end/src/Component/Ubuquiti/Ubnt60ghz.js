@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { List, Card, Row, Col } from 'antd';
 import WifiIndicator, { DBMToSignalStrength } from 'react-wifi-indicator';
-import formatBytes from './Formatbytes';
-import secondsToDhms from './secondToDhms';
-import Axiosprocess from './Axioss/Axiosprocess'
+import formatBytes from '../Formatbytes';
+import secondsToDhms from './secondToDhms.js';
+import Axiosps from '../ManageRequest/Axiosps'
+
+
 
 const Ubnt60ghz = () => {
     const [Dataubnt, setDataubnt] = useState([])
 
     useEffect(() => {
         const interva = setInterval(() => {
-            Axiosprocess.Ubnt60ghz().then(res => { setDataubnt(res) })
+            Axiosps.Ubnt60ghz().then(res => { setDataubnt(res) }).catch((err)=>console.log(err))
         }, 5000)
         return () => {
-
             setDataubnt([])
             clearInterval(interva)
         }

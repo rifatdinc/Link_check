@@ -10,13 +10,13 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor
 import nmap3
 from concurrent.futures import ProcessPoolExecutor
-
+from Db.PoyrazLink import Poyrazdb
 
 class Mikrotik():
+    Pndb= Poyrazdb()
 
     def FirstApi(self, ip):
         try:
-
             self.Apir = Api(ip, "admin", 'Password')
         except Exception as err:
             print('Expection Login error------', err)
@@ -177,7 +177,6 @@ class Mikrotik():
             Rx = size(int(x['rx-bits-per-second']), system=alternative)
             return {"Tx": Tx, "Rx": Rx}
 
-        # return{}
 
     def MikrotikApiCheck(self, ip):
         nmap = nmap3.NmapHostDiscovery()
@@ -185,28 +184,13 @@ class Mikrotik():
         results = nmap.nmap_portscan_only(ip, args="-p 8728")
         return results[ip]['ports'][0]['state']
 
-    def Databaseqets(self, Qstring, queryStriq):
-        connection = mysql.connector.connect(host='127.0.0.1', user="root", password="Password",
-                                             database="PoyrazwifiVerici", auth_plugin='mysql_native_password')
-        cursor = connection.cursor()
-        cursor.execute(
-            'Select distinct device,nas,ip From tblLink WHERE device="'+Qstring+'" and nas="'+queryStriq+'"  and not type="RBLHGG-60ad" ORDER BY ip')
-        gels = cursor.fetchall()
-        lsa = []
-        for xd in gels:
-            qet = xd[2].decode()
-            if qet not in lsa:
-                dd = qet.replace(" ", "")
-                if self.MikrotikApiCheck(dd) == "open":
-                    lsa.append(dd)
 
-        return lsa
 
     def LastFunc(self, Qstrinq, querySrinq):
         kls = []
         with ProcessPoolExecutor() as executor:
             result = executor.map(
-                self.FirstApi, self.Databaseqets(Qstrinq, querySrinq))
+                self.FirstApi, self.Pndb.Mikrotik5gHz_db(Qstrinq, querySrinq))
 
             for x in result:
                 kls.append(x)

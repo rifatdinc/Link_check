@@ -26,75 +26,25 @@ import time
 import mysql.connector
 import json
 import nmap3
-
-<<<<<<< Updated upstream
-def sql():
-    connection = mysql.connector.connect(host="127.0.0.1", user="root", password="Password",
-                                              database="LinkSnmp", auth_plugin='mysql_native_password')
-    cursor = connection.cursor()
-    cursor.execute(
-        'Select Bname From bras ORDER BY Bname')
-    gels = cursor.fetchall()
-    nasName = []
-    for values in gels:
-        nasnameStr = values[0].decode()
-        nasName.append(nasnameStr)
-    return nasName
-
-async def Snmpdata(ip):
-    try:
-        degerler = {}
-        async with aiosnmp.Snmp(host=ip, port=161, community="public") as snmp:
-            getlist = []
-            for res in await snmp.get(['1.3.6.1.4.1.43356.2.1.2.1.1.0',
-                                    '1.3.6.1.4.1.43356.2.1.2.5.8.0',
-                                    '1.3.6.1.4.1.43356.2.1.2.6.3.1.3.1',
-                                    '1.3.6.1.4.1.43356.2.1.2.6.1.1.6.1',
-                                    '1.3.6.1.4.1.43356.2.1.2.7.1.0',
-                                    '1.3.6.1.4.1.43356.2.1.2.6.2.1.5.1',
-                                    '1.3.6.1.4.1.43356.2.1.2.6.2.1.5.2',
-                                    '1.3.6.1.4.1.43356.2.1.2.7.2.0',
-                                    '1.3.6.1.4.1.43356.2.1.2.1.8.0',
-                                    '1.3.6.1.4.1.43356.2.1.2.3.3.0',
-                                    '1.3.6.1.4.1.43356.2.1.2.6.1.1.3.1',
-                                    '1.3.6.1.4.1.43356.2.1.2.6.1.1.3.2',
-                                    '1.3.6.1.4.1.43356.2.1.2.6.2.1.2.1',
-                                    '1.3.6.1.4.1.43356.2.1.2.6.2.1.2.2',
-                                    '1.3.6.1.4.1.43356.2.1.2.6.2.1.5.3',
-                                    '1.3.6.1.4.1.43356.2.1.2.6.2.1.5.4',
-                                    '1.3.6.1.4.1.43356.2.1.2.6.2.1.2.3',
-                                    '1.3.6.1.4.1.43356.2.1.2.6.2.1.2.4',
-                                    '1.3.6.1.2.1.2.2.1.5.1']):
-
-                task = asyncio.ensure_future(
-                    Apisnmp(res))
-                getlist.append(task)
-                
-            view = await asyncio.gather(*getlist)
-=======
+from Db.PoyrazLink import Poyrazdb 
 class Mimosa():
-    def __init__(self):
-        self.linkpwd = os.environ.get("linpaswd")
-        self.dbuser = os.environ.get("dbuser")
-        self.dbpasswd = os.environ.get("dbpasswd")
-        self.dbhost = os.environ.get("host")
-        self.dbdatabase = os.environ.get("dbdatabase")
+    pndb = Poyrazdb()
         
-    def sql(self):
-        connection = mysql.connector.connect(host=self.dbhost, user=self.dbuser, password=self.dbpasswd,
-                                                database=self.db, auth_plugin='mysql_native_password')
-        cursor = connection.cursor()
-        cursor.execute(
-            'Select Bname From bras ORDER BY Bname')
-        gels = cursor.fetchall()
-        nasName = []
-        for values in gels:
-            nasnameStr = values[0].decode()
-            nasName.append(nasnameStr)
-        return nasName
+    # def sql(self):
+    #     connection = mysql.connector.connect(host=self.dbhost, user=self.dbuser, password=self.dbpasswd,
+    #                                             database=self.db, auth_plugin='mysql_native_password')
+    #     cursor = connection.cursor()
+    #     cursor.execute(
+    #         'Select Bname From bras ORDER BY Bname')
+    #     gels = cursor.fetchall()
+    #     nasName = []
+    #     for values in gels:
+    #         nasnameStr = values[0].decode()
+    #         nasName.append(nasnameStr)
+    #     return nasName
+
 
     async def Snmpdata(self,ip):
->>>>>>> Stashed changes
         try:
             degerler = {}
             async with aiosnmp.Snmp(host=ip, port=161, community="public") as snmp:
@@ -192,25 +142,11 @@ class Mimosa():
         return (res.value)
 
 
-    def DatabaseIp(self,Qstring, queryStriq):
-        connection = mysql.connector.connect(host=self.dbhost, user=self.dbuser, password=self.dbpasswd,
-                                                database=self.db, auth_plugin='mysql_native_password')
-        cursor = connection.cursor()
-        cursor.execute(
-            'Select ip From tblLink WHERE device="'+Qstring+'" and nas="'+queryStriq+'"  ORDER BY ip')
-        gels = cursor.fetchall()
-        list2 = []
-        for x in gels:
-            for c in x:
-                list2.append(str(c.decode()))
-
-        return list2
-
 
     async def endPoint(self,Qstring, queryStriq):
         lis2 = []
         
-        for d in self.DatabaseIp(Qstring, queryStriq):
+        for d in self.pndb.MimosaIp(Qstring,queryStriq):
             response = os.system('ping -c 1 -W 1 ' + d + '>> /dev/null 2>&1')
             if response == 0:
                 ds = asyncio.ensure_future(self.Snmpdata(d))
