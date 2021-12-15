@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { List, Card, Row, Col } from 'antd';
 import WifiIndicator, { DBMToSignalStrength } from 'react-wifi-indicator';
 import { Grid, Menu, Segment } from 'semantic-ui-react'
-import formatBytes from './Formatbytes';
-import secondsToDhms from './secondToDhms';
-import Axiosproce from './Axioss/Axiosprocess'
+import formatBytes from '../Formatbytes';
+import secondsToDhms from './secondToDhms.js';
+import Axiosps from '../ManageRequest/Axiosps'
 
 const Ubnt5gHz = () => {
     const [ubnt5ghzdata, setubnt5ghzdata] = useState([])
@@ -17,7 +17,7 @@ const Ubnt5gHz = () => {
     useEffect(() => {
         // Sql Datalarini yonetmek icin axiosproces isimli
         // Modulumden Nasdatasini import edip burada kullaniyorum.
-        Axiosproce.Nasdataccr().then((res) => { setSqldata(res) })
+        Axiosps.Nasdataccr().then((res) => { setSqldata(res) })
     }, [])
 
 
@@ -25,7 +25,7 @@ const Ubnt5gHz = () => {
         const payload = { "Clicks": Target }
         if (Target.length > 0) {
             const interva = setInterval(() => {
-                Axiosproce.Ubnt5gHz(payload).then((res) => {
+                Axiosps.Ubnt5gHz(payload).then((res) => {
                     setubnt5ghzdata(res)
                     setLoading(false)
                 })

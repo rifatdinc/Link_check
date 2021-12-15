@@ -3,7 +3,7 @@ import { List, Card, Row, Col } from 'antd';
 import WifiIndicator, { DBMToSignalStrength } from 'react-wifi-indicator';
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import { css } from "@emotion/react";
-import Axiosps from './Axioss/Axiosprocess'
+import Axiosps from '../ManageRequest/Axiosps'
 const Mik60Ghz = () => {
     const [Mikd60, setMikd60] = useState([])
 

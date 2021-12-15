@@ -8,8 +8,7 @@ from ubntapi import Ubntos
 from SignalScan import SignalTarama
 from SignalScan.Connectscan import qscancon
 from Ubnt5 import lastubntendpoint
-from Signalsend.SignalSend import SnmpSignal
-import aiosnmp
+from SignalResponse.SignalSend import SnmpSignal
 import asyncio
 import json
 app = Flask(__name__)
@@ -29,13 +28,9 @@ def SpeaksSignals():
 
 @app.route('/getdatasql', methods=["POST"])
 def sardata():
-
     data = json.loads(request.data)
-
     Pors = DatabaseIp('mimosa', data['Clickdata'])
-    
     Dats = asyncio.run(endPoint('mimosa', data['Clickdata'].replace(" ","")))
-    print(Dats)
     return json.dumps(Dats)
 
 
@@ -43,15 +38,12 @@ def sardata():
 def Mikrotikdata():
     m = Mikrotik()
     data = json.loads(request.data)
-    Data = m.LastFunc('mikrotik', data['Clicks'].replace(" ",""))
-    return json.dumps(Data)
+    return json.dumps(m.LastFunc('mikrotik', data['Clicks'].replace(" ","")))
 
 
 @app.route('/Mik60ghz')
 def Mik60GHZ():
-    Data = Lastendpoint()
-
-    return json.dumps({"Data": Data})
+    return json.dumps({"Data": Lastendpoint()})
 
 
 @app.route('/ubnt60ghz')
@@ -87,8 +79,6 @@ def realdatascan():
     data = json.loads(request.data)
     Costumerinfo = SignalTarama.CostumeInfo(data["Ipadress"])
     return json.dumps(Costumerinfo)
-
-
 
 
 if __name__ == '__main__':

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Select } from 'antd';
-import Axiosps from '../Axioss/Axiosprocess'
+import Axiosps from '../ManageRequest/Axiosps'
 
 /* eslint-disable no-template-curly-in-string */
 const { Option } = Select;
 
 /* eslint-enable no-template-curly-in-string */
 
-const Arizabul = () => {
+const Fail_find = () => {
     const [Orm, setOrm] = useState([])
     useEffect(() => {
         Axiosps.Nasdataccr()
@@ -40,4 +40,4 @@ const Arizabul = () => {
         </div>
     );
 };
-export default Arizabul
+export default Fail_find
