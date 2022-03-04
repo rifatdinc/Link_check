@@ -1,9 +1,11 @@
 #!/usr/bin/python3
+import json
 import aiosnmp
 import asyncio
 import subprocess
 from aiosnmp.exceptions import SnmpTimeoutError
 from aiosnmp.message import SnmpVersion
+from asyncio.tasks import sleep
 
 import requests
 from Db.PoyrazLink import Poyrazdb
@@ -13,8 +15,12 @@ from ubntapi import Ubntos
 import binascii
 import os
 
+
 class SnmpSignal:
     Pn = Poyrazdb()
+    def __init__(self) -> None:
+        self.linkpwd = os.environ.get("linpaswd")
+
     async def SnmpMimosa(self, ip):
         try:
             degerler = []
@@ -35,15 +41,15 @@ class SnmpSignal:
         """
         Bu Fonksiyonun yaptigi islem snmp ile bilgileri alip cozumleme yapiyor.
         """
-        try:
-            sa = Api(ip, "admin", self.linkpwd)
-        except Exception as Err:
-            print(Err, "Giris Kismindaki Hata")
+        sa = Api(ip, "admin", self.linkpwd)
+
         sa.talk("/snmp/set\n=enabled=yes")
 
         routermodel = sa.talk("/system/routerboard/print")[0]
         if routermodel["model"] == "RBLHGG-60ad":
-            return sa.talk("/interface/w60g/monitor\n=numbers=wlan60-1\n=once=")[0]["rssi"]
+            return sa.talk("/interface/w60g/monitor\n=numbers=wlan60-1\n=once=")[0][
+                "rssi"
+            ]
         Tx_ChainsZero = sa.talk(
             "/interface/wireless/registration-table/print\n=.proplist=signal-strength-ch0.oid"
         )
@@ -67,17 +73,26 @@ class SnmpSignal:
     def SnmpUbnt(self, ip):
         ubnt = Ubntos()
         Data = ubnt.RSession(ip)
-        return Data["Data"]['Data1']['wireless']["sta"][0]['signal']
+        return [str(Data["Data"]["Data1"]["wireless"]["sta"][0]["signal"])]
 
     async def SnmpCompanyName(self, ip) -> str:
-        async with aiosnmp.Snmp(host=ip,port=161,community="public",) as snmp:
+        async with aiosnmp.Snmp(
+            host=ip,
+            port=161,
+            community="public",
+        ) as snmp:
             try:
                 for res in await snmp.get([".1.3.6.1.2.1.2.2.1.6.2"]):
-                    return self.MacAdresFind(binascii.hexlify(res.value).decode()[0:6].upper())
+                    print(res.value)
+                    return Poyrazdb().MacAdresFind(
+                        binascii.hexlify(res.value).decode()[0:6].upper()
+                    )
 
             except SnmpTimeoutError:
-                #The Ubuqiti Network is returning the SnmpTimeoutError error "No Response" on the device
-                shell = subprocess.run(["snmpwalk",
+                # The Ubuqiti Network is returning the SnmpTimeoutError error "No Response" on the device
+                shell = subprocess.run(
+                    [
+                        "snmpwalk",
                         "-c",
                         "public",
                         "-v",
@@ -89,23 +104,28 @@ class SnmpSignal:
                     capture_output=True,
                 )
                 Ubuquiti = shell.stdout.decode()
-                return self.Pn.MacAdresFind(Ubuquiti.split("=")[1].split("G")[1].replace(" ","").replace("\n","").replace(":","")[0:6].upper())
-               
+                return self.Pn.MacAdresFind(
+                    Ubuquiti.split("=")[1]
+                    .split("G")[1]
+                    .replace(" ", "")
+                    .replace("\n", "")
+                    .replace(":", "")[0:6]
+                    .upper()
+                )
 
     def Lstenpoint(self, ip):
+        ip = ip["IpaddressSpeak"]
         Company = asyncio.run(self.SnmpCompanyName(ip))
-
         if "Ubiquiti Networks Inc." == Company:
-            return self.SnmpUbnt(ip)
+            return json.dumps(self.SnmpUbnt(ip))
         elif "Mimosa Networks" == Company:
             AsyncMimosa = asyncio.run(self.SnmpMimosa(ip))
-            print(AsyncMimosa)
             Asynm = str(AsyncMimosa[1])[1:3]
-            return [Asynm]
+            return json.dumps([Asynm])
         elif "Routerboard.com" == Company:
-            return asyncio.run(self.SnmpMikrotik(ip))
+            return json.dumps(asyncio.run(self.SnmpMikrotik(ip)))
         else:
-            return "Vendor is not defined"
+            return json.dumps({"Error": "Vendor is not defined"})
 
 
 [
@@ -113,7 +133,3 @@ class SnmpSignal:
     # "Routerboard.com"
     # Mimosa Networks"
 ]
-Obj = SnmpSignal()
-
-Dot1 = Obj.Lstenpoint("10.104.1.21")
-print(Dot1)

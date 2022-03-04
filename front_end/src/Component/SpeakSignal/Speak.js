@@ -1,75 +1,57 @@
 import React, { useEffect, useState } from 'react'
-import Speech from 'react-speech';
 import Axiosps from '../ManageRequest/Axiosps'
-import { Input, Form, Button } from 'antd';
-
+import { Input, Form, Button, Spin } from 'antd';
 const Zorlakonusutur = () => {
     const [Dataa, setDataa] = useState([])
     const [TargerSignal, setTargerSignal] = useState('')
+    const [Check, setCheck] = useState(true)
 
     const Dataqets = () => {
         setTargerSignal(document.getElementById('IpaddressSpeak').value)
+        setCheck(true)
     }
-
-    const Dataokut = () => {
-        try {
-            if (TargerSignal.length > 0) {
-                setTimeout(() => {
-                    document.getElementsByClassName("rs-play")[0].click()
-                    
-                }, 2000);
-            }
-        } catch (error) {
-            console.log(error);
-        }
+    const Stopted = () => {
+        setCheck(false)
+        console.log('xx')
     }
-
     useEffect(() => {
-        if (TargerSignal.length > 0) {
-            const Paylod = { "IpaddressSpeak": TargerSignal }
-            var Intervals1 = setInterval(() => {
-                Axiosps.SpeakSignal(Paylod).then(res => {
-                    if (res) {
-                        setDataa(res)
-                    }
+        if (Check) {
+            if (TargerSignal.length > 0) {
+                const Paylod = { "IpaddressSpeak": TargerSignal }
+                var Intervals1 = setInterval(() => {
+                    Axiosps.SpeakSignal(Paylod).then(res => {
+                        if (res) {
+                            console.log(res)
+                            var msg = new SpeechSynthesisUtterance(res[0])
+                            msg.lang = 'tr-TR'
+                            window.speechSynthesis.speak(msg)
+                            setDataa(res)
 
-
-                }).catch(err => console.log(err))
-            }, 2000);
-
+                        }
+                    }).catch(err => console.log(err))
+                }, 2000);
+            } else {
+                clearInterval(Intervals1)
+            }
             return () => {
                 clearInterval(Intervals1)
                 setDataa([])
-
             }
         }
 
-    }, [TargerSignal])
+    }, [Check, TargerSignal])
 
     return (
-        <div>
-            <Form>
+        <div >
+            <h3 className='text-center mt-3' >Signal Speaker</h3>
+            <Form className='mt-5'>
                 <Form.Item>
                     <Input id="IpaddressSpeak" placeholder="Ip adresi giriniz Ornegin : 10.23.1.245" />
                 </Form.Item>
             </Form>
-            <Button onClick={Dataqets}> Baslat</Button>
-            <Button> Durdur</Button>
-
-            {Dataa.map((e) => {
-                return <div id="Starts1">
-                    <Speech
-                        key={Math.random()}
-                        text={e}
-                        rate="1"
-                        textAsButton={true}
-                        displayText="Baslat"
-                        lang="tr-TR"
-                        voice="Google TR Turkish Female" />
-                </div>
-            })}
-            {Dataa.length > 0 ? Dataokut():console.log("Data Okut")}
-           
+            {Dataa.length > 0 && Dataa.map((e) => <h1 className='text-center'>{e}</h1>)}
+            <Button type='primary' className='mb-2' block onClick={Dataqets}> Baslat</Button>
+            <Button type='danger' block onClick={Stopted}> Durdur</Button>
         </div>
     )
 }

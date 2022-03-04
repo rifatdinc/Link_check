@@ -1,4 +1,4 @@
-const secondsToDhms = (seconds) => {
+function secondsToDhms(seconds) {
     seconds = Number(seconds);
     var d = Math.floor(seconds / (3600 * 24));
     var h = Math.floor(seconds % (3600 * 24) / 3600);
@@ -12,4 +12,4 @@ const secondsToDhms = (seconds) => {
     return dDisplay + hDisplay + mDisplay + sDisplay;
 }
 
-export default secondsToDhms
+export default secondsToDhms;

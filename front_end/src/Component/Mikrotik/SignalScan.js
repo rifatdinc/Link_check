@@ -56,7 +56,7 @@ const SignalScan = () => {
         const payload = {
             "Ipadress": idip
         }
-        axios.post('http://localhost:5000/realdatascan', payload)
+        axios.post('http://192.10.10.180:5000/realdatascan', payload)
             .then(res => setScanreal(res.data))
 
 
@@ -74,7 +74,7 @@ const SignalScan = () => {
             "Ipadress": idip,
             "Frequency": Frequency,
         }
-        axios.post('http://localhost:5000/scanconnect', payload)
+        axios.post('http://192.10.10.180:5000/scanconnect', payload)
             .then(res => setRealspeed(res.data))
 
     }
@@ -87,7 +87,7 @@ const SignalScan = () => {
                 message.error('Ip bos olamaz.');
             }
             const payload = { "Data": ip }
-            axios.post('http://localhost:5000/signalscan', payload)
+            axios.post('http://192.10.10.180:5000/signalscan', payload)
                 .then((res) => {
                     console.log(res.data)
                     setdata(res.data)

@@ -6,9 +6,9 @@ from pathlib import Path
 
 
 
-def ftpDownload(filesname,ip):
+def ftpDownload(filesname,ip,mikpasswd):
     ftp = FTP(ip)
-    ftp.login('admin','password')
+    ftp.login('admin',mikpasswd)
 
     # Get All Files
     files = ftp.nlst(filesname)

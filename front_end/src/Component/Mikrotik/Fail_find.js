@@ -1,42 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Select } from 'antd';
+import { Form, Select, Button } from 'antd';
 import Axiosps from '../ManageRequest/Axiosps'
 
-/* eslint-disable no-template-curly-in-string */
-const { Option } = Select;
-
-/* eslint-enable no-template-curly-in-string */
 
 const Fail_find = () => {
     const [Orm, setOrm] = useState([])
+    const [Result,setResult] =useState([])
     useEffect(() => {
-        Axiosps.Nasdataccr()
-        .then(res => setOrm(res))
-        .catch(err => console.log(err))
+        Axiosps.Nasdatavalue()
+            .then(res => {
+                setOrm(res)
+            })
+            .catch(err => console.log(err))
     }, [])
 
 
-    const startRun = () => {
-        return document.getElementById('Nasselect').parentElement.parentElement.lastChild.title
+    const RequestEnd = (_value, key) => {
+        setResult([...key])
+
     }
-    
+    const SubmitRequest = ()=>{
+        Axiosps.Find_Fail(Result).then().catch().finally()
+    }
 
 
 
     return (
         <div className="container p-3">
             <h1 className="text-center">Musteri Ariza Bul</h1>
-            <Form.Item
-                name="Nasselect"
-                label="Router Seciniz">
-                <Select>
-                    {Orm.map((e) => {
-                        return <Option id="Namikkemal" key={e}>{e}</Option>
-                    })}
+            <Form >
+                <Form.Item
+                    name="Nasselect"
+                    label="Router Seciniz">
+                    <Select allowClear onChange={RequestEnd} mode="tags" options={Orm} />
+                </Form.Item>
+            </Form>
+            <Button block onClick={SubmitRequest} type='primary' htmlType='submit'>Başlat</Button>
 
-                </Select>
-            </Form.Item>
-            {Orm.length > 0 ? <button onClick={startRun}>Dogru</button> : null}
         </div>
     );
 };

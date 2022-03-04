@@ -14,19 +14,19 @@ const Mik60Ghz = () => {
     align-items: center; `;
 
     useEffect(() => {
-
-        const interva = setInterval(() => {
-            Axiosps.Mikrotik60ghz().then((res)=>{
-                setMikd60(res)}).catch(err => console.log(err))
-        }, 5000)
-        return () => clearInterval(interva)
+            var interba = setInterval(() => {
+                Axiosps.Mikrotik60ghz().then((res)=>{
+                    setMikd60(res)}).catch(err => console.log(err))
+            }, 4000);
+           
+        return () => clearInterval(interba)
 
     }, [])
 
     return (
         <div>
 
-            {Mikd60 && Mikd60.length > 0 ? <div>
+            {Mikd60 && Mikd60.length > 0 ? <div className='mt-3'>
                 <List
 
                     grid={{ gutter: 16, xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 4, }}
@@ -34,23 +34,25 @@ const Mik60Ghz = () => {
 
                     dataSource={Mikd60}
                     renderItem={item => (
-
+                        
                         <List.Item id="Cardbolumu" bordered="true" style={{ width: "450px" }} >
+                            {console.log(item.system.DeviceName)}
+                            {console.log(item)}
                             <Card size="small">
 
                                 <Row>
                                     <Col span={8}>
                                         <a className="text-right" href={`http://${item.Ipadres}`} > {item.Ipadres} </a>
 
-                                        <div>{item.system[0]['DeviceName']}</div>
-                                        <div>Cpu {item.system[0]['Cpu']} %</div>
-                                        <div style={{ fontSize: "11px" }} >Uptime {item.system[0]['Uptime']}</div>
+                                        <div>{item.system['DeviceName']}</div>
+                                        <div>Cpu {item.system['Cpu']} %</div>
+                                        <div style={{ fontSize: "11px" }} >Uptime {item.system['Uptime']}</div>
                                     </Col>
                                     <Col span={8} offset={8}>
-                                        <div> Wireless Disable  {item.wireless[0]['Wireless_Disable'] !== 'false' ? <i class="fas fa-times"></i> : <i class="fas fa-check"></i>}</div>
-                                        <div> Ethernet Disable  {item.Ethernet[0]['Ethernet_Disable'] !== 'false' ? <i class="fas fa-times"></i> : <i class="fas fa-check"></i>}</div>
-                                        <div> Wireless Running  {item.wireless[0]['Wireless_Running'] === 'false' ? <i class="fas fa-times"></i> : <i class="fas fa-check"></i>}</div>
-                                        <div> Ethernet Running  {item.Ethernet[0]['Ethernet_Running'] === 'false' ? <i class="fas fa-times"></i> : <i class="fas fa-check"></i>}</div>
+                                        <div> Wireless Disable  {item.wireless[0]['Wireless_Disable'] !== 'false' ? <i className="fas fa-times"></i> : <i className="fas fa-check"></i>}</div>
+                                        <div> Ethernet Disable  {item.Ethernet[0]['Ethernet_Disable'] !== 'false' ? <i className="fas fa-times"></i> : <i className="fas fa-check"></i>}</div>
+                                        <div> Wireless Running  {item.wireless[0]['Wireless_Running'] === 'false' ? <i className="fas fa-times"></i> : <i className="fas fa-check"></i>}</div>
+                                        <div> Ethernet Running  {item.Ethernet[0]['Ethernet_Running'] === 'false' ? <i className="fas fa-times"></i> : <i className="fas fa-check"></i>}</div>
                                     </Col>
                                 </Row>
 
@@ -61,7 +63,7 @@ const Mik60Ghz = () => {
                                             <th scope="col"></th>
                                             <th scope="col">Model</th>
                                             <th scope="col"></th>
-                                            <th scope="col" className="text-right">{item.system[0]['BoardName']}</th>
+                                            <th scope="col" className="text-right">{item.system.BoardName}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -100,7 +102,7 @@ const Mik60Ghz = () => {
                                             <th scope="row"></th>
                                             <td>Yazilim </td>
                                             <td></td>
-                                            <td className="text-right"> {item.system[0]['Firmware']} </td>
+                                            <td className="text-right"> {item.system.Firmware} </td>
                                         </tr>
                                         <tr>
                                             <th scope="row"></th>

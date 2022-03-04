@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+from concurrent import futures
+import json
+import os
 from typing import List
 from Db.PoyrazLink import Poyrazdb
 from routeros_api import Api
@@ -7,14 +10,16 @@ from hurry.filesize import size, alternative
 
 
 class Mik60gHz:
-        
-        
-    db= Poyrazdb()
+    def __init__(self) -> None:
+        self.linpaswd = os.environ.get("linpaswd")
+        self.db = Poyrazdb()
 
-    def Mik60ghz(self,ip):
+
+    def Mik60ghz(self, ip):
+        print(ip)
         try:
 
-            Apir = Api(ip, "admin", "Password")
+            Apir = Api(ip, "admin", self.linpaswd)
         except Exception as err:
             return {"err": err}
 
@@ -60,13 +65,12 @@ class Mik60gHz:
             uptime = rr["uptime"]
             boardname = rr["board-name"]
             cpu1 = rr["cpu-load"]
-        return [
-            {
+        return {
                 # 'ActiveUser': activeUser,
                 # "Ip_Addres": ipads,
                 "Interface": interface,
                 "Wlandata": wlandata,
-                "system": [
+                "system": 
                     {
                         "BoardName": boardname,
                         "Uptime": uptime,
@@ -75,8 +79,8 @@ class Mik60gHz:
                         "DeviceName": systemNames,
                         "Cpu": cpu1,
                     }
-                ],
-                "Getcurrent": self.GetcurrentData(ip=ip,Apir=Apir),
+                ,
+                "Getcurrent": self.GetcurrentData(Apir),
                 "Ipadres": ipAdress[0]["address"][:-3],
                 "Ethernet": [
                     {
@@ -98,10 +102,9 @@ class Mik60gHz:
                     }
                 ],
             }
-        ]
+        
 
-
-    def GetcurrentData(self,ip,Apir):
+    def GetcurrentData(self,  Apir):
         getRequest = Apir.talk("/interface/monitor-traffic\n=interface=ether1\n=once=")
         for x in getRequest:
             Tx = size(int(x["tx-bits-per-second"]), system=alternative)
@@ -109,23 +112,13 @@ class Mik60gHz:
             # print(Tx,Rx)
             return {"Tx": Tx, "Rx": Rx}
 
-
     def Lastendpoint(self):
-        Ipdata = self.db.Mikrotik60gHz_db()
-        Lists = []
-        for x in Ipdata:
-            # print(x)
-            L = self.Mik60ghz(x)
-            # print(L)
-            for Ls in L:
-                # print(Ls)
-                Lists.append(Ls)
-
-            # Lists.append(L)
-
-        return Lists
-
-
-    print(Lastendpoint())
+        print(self.db.Mikrotik60gHz_db())
+        result_list = []
+        with futures.ThreadPoolExecutor() as executor:
+            result = executor.map(self.Mik60ghz, self.db.Mikrotik60gHz_db())
+            for x in result:
+                result_list.append(x)
+        return json.dumps(result_list)
 
     # ["10.124.7.9","10.121.2.3"]

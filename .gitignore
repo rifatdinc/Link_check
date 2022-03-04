@@ -1,1 +1,3 @@
 /build
+Backend/Models/MsystemPrivate.py
+Backend/Db/PoyrazLink.py

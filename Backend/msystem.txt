@@ -1,0 +1,13 @@
+/interface pppoe-server server
+add authentication=pap,chap disabled=no interface=vlan-ether1-3562-GuvenAp1 one-session-per-host=yes service-name=GuvenAp1
+add authentication=pap,chap disabled=no interface=vlan-ether1-3563-GuvenAp2 one-session-per-host=yes service-name=GuvenAp2
+add authentication=pap,chap disabled=no interface=vlan-ether1-3564-GuvenAp3 one-session-per-host=yes service-name=GuvenAp3
+add authentication=pap,chap disabled=no interface=vlan-ether1-3565-GuvenAp4 one-session-per-host=yes service-name=GuvenAp4
+add authentication=pap,chap disabled=no interface=vlan-ether1-3566-GuvenAp5 one-session-per-host=yes service-name=GuvenAp5
+add authentication=pap,chap disabled=no interface=vlan-ether1-3567-GuvenAp6 one-session-per-host=yes service-name=GuvenAp6
+add authentication=pap,chap disabled=no interface=vlan-ether1-3568-GuvenAp7 one-session-per-host=yes service-name=GuvenAp7
+add authentication=pap,chap disabled=no interface=vlan-ether1-3569-GuvenAp8 one-session-per-host=yes service-name=GuvenAp8
+add authentication=pap,chap disabled=no interface=vlan-ether1-3570-GuvenAp9 one-session-per-host=yes service-name=GuvenAp9
+add authentication=pap,chap disabled=no interface=vlan-ether1-272-GuvenAp4A one-session-per-host=yes service-name=GuvenAp4A
+add authentication=pap,chap disabled=no interface=vlan-ether1-273-GuvenAp5A one-session-per-host=yes service-name=GuvenAp5A
+add authentication=pap,chap disabled=no interface=ether1 max-mru=1480 max-mtu=1480 mrru=1600 one-session-per-host=yes service-name=Guven_Bina

@@ -1,12 +1,65 @@
 @import "~antd/dist/antd.css";
 
+.site-layout-background {
+    background-color: black;
+}
+.ant-list * {
+    border-color: black;
+    color: white;
+}
+.Login_sayfa {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    margin: auto;
+    text-align: center;
+}
+#sing_in {
+    position: absolute;
+    right: 0px;
+    width: 300px;
+    padding: 10px;
+}
+#components-layout-demo-top-side-2 .logo {
+    float: left;
+    width: 120px;
+    height: 31px;
+    margin: 16px 24px 16px 0;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.ant-row-rtl #components-layout-demo-top-side-2 .logo {
+    float: right;
+    margin: 16px 0 16px 24px;
+}
+
+
+
+#BackPR {
+    min-height: 100%;
+    min-width: 1024px;
+
+    /* Set up proportionate scaling */
+    width: 100%;
+    height: auto;
+
+    /* Set up positioning */
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+@media screen and (max-width: 1024px) { /* Specific to this particular image */
+    #BackPR {
+      left: 50%;
+      margin-left: -512px;   /* 50% */
+    }
+  }
 #MenuIcons {
     margin-top: 60px;
 }
 
-#LeftBlock {
-    background-color: white;
-}
+
 
 .ant-list * {
     border-color: black;
@@ -27,11 +80,9 @@
     padding-top: 10px;
 }
 
-
-
 .ui.vertical.tabular.menu .active.item {
     background: none #ffffff;
-    color: rgb(75,32,191);
+    color: rgb(75, 32, 191);
     border-color: #7866a9;
     margin: 0 -1px 0 0;
     border-radius: 2.28571rem 0 0 2.28571rem !important;

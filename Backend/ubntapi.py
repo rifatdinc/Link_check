@@ -1,4 +1,5 @@
 #!/usr/bin/python3.8
+import json
 from typing import AsyncContextManager
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import ProcessPoolExecutor
@@ -52,20 +53,16 @@ class Ubntos:
     def ubnt60ghzList(self):
         # Since these IPs are private IPs, I did not need to hide them.
         return [
-            "10.131.1.2",
-            "10.131.1.3",
             "10.126.1.3",
             "10.126.1.4",
-            # '10.104.1.131',
-            # '10.104.1.130',
             "10.117.13.2",
             "10.117.13.3",
             "10.129.7.50",
             "10.129.7.51",
             "10.130.4.6",
             "10.130.4.5",
-            "10.107.0.5",
-            "10.107.0.6",
+            # "10.107.0.5",
+            # "10.107.0.6",
             "10.120.4.54",
             "10.120.4.55",
         ]
@@ -74,10 +71,11 @@ class Ubntos:
         kls = []
         with ProcessPoolExecutor() as executor:
             result = executor.map(self.RSession, self.ubnt60ghzList())
+            print(result)
             for x in result:
-                kls.append(x)
 
-        return kls
+                kls.append(x)
+        return json.dumps(kls)
 
 
 if __name__ == "__main__":

@@ -1,73 +1,122 @@
 import axios from "axios";
+import return401 from "../../utils/return401";
+
+const funcToken = () => {
+    const token1 = localStorage.getItem('tokens')
+    const tokens = { headers: { "Authorization": `Bearer ${token1}` } }
+    
+    return tokens
+}
 
 const Nasdataccr = async () => {
     try {
-        const res = await axios.get('http://192.168.192.102:5000/nasdata');
-        return await res.data;
-    } catch (err) {
-        return console.log(err);
+        const res = await axios.get('http://192.10.10.180:5000/nasdata', funcToken());
+        return res.data;
+    } catch (error) {
+        return401(error)
+
     }
 }
 
+const Nasdatavalue = async () => {
+    try {
+        const res = await axios.get('http://192.10.10.180:5000/nasdatavalue', funcToken());
+        return res.data;
+    } catch (error) {
+        return401(error)
+    }
+}
+
+
 const Mimosa = async (payload) => {
     try {
-        const res = await axios.post('http://192.168.192.102:5000/getdatasql', payload);
+        const res = await axios.post('http://192.10.10.180:5000/getdatasql', payload, funcToken());
         if (res.data) {
             return res.data
         } else {
             return res.data = []
         }
-    } catch (err) {
-        return console.log(err);
+    } catch (error) {
+        return401(error)
+
     }
 }
 
 const Ubnt5gHz = async (payload) => {
     try {
-        const res = await axios.post('http://192.168.192.102:5000/ubnt5gHz', payload);
+        const res = await axios.post('http://192.10.10.180:5000/ubnt5gHz', payload, funcToken());
         if (res.data !== null) {
             return res.data;
         }
 
-    } catch (err) {
-        return console.log(err);
+    } catch (error) {
+        return401(error)
+
     }
 }
 
 const Ubnt60ghz = async () => {
-    const res = await axios.get('http://192.168.192.102:5000/ubnt60ghz');
-    return res.data;
+
+    try {
+        const res = await axios.get('http://192.10.10.180:5000/ubnt60ghz', funcToken());
+        return res.data;
+    } catch (error) {
+        return401(error)
+
+    }
 }
 
 const SpeakSignal = async (payload) => {
+
     try {
 
-        const res = await axios.post('http://192.168.192.102:5000/Speaksignal', payload)
+        const res = await axios.post('http://192.10.10.180:5000/Speaksignal', payload, funcToken())
         if (res.data !== null) {
 
             return res.data
         }
     } catch (error) {
-        console.log(error);
+        return401(error)
     }
 }
 
 const Mikrotikreq = async (payload) => {
+
     try {
-        const res = await axios.post('http://192.168.192.102:5000/mikrotik', payload)
+        const res = await axios.post('http://192.10.10.180:5000/mikrotik', payload, funcToken())
         return res.data
     } catch (error) {
-        console.log(error);
+        return401(error)
     }
 }
 
 const Mikrotik60ghz = async () => {
-    try {
-        const res = await axios.get('http://192.168.192.102:5000/Mik60ghz')
 
-        return res.data['Data']
+    try {
+        const res = await axios.get('http://192.10.10.180:5000/Mik60ghz', funcToken())
+        return res.data
     } catch (error) {
-        console.log(error);
+        return401(error)
+    }
+}
+
+const Find_Fail = async (payload) => {
+
+    try {
+        const res = await axios.post('http://192.10.10.180:5000/find_fail', payload, funcToken())
+        return res.data
+    } catch (error) {
+        return401(error)
+    }
+
+}
+
+const Login = async (payload) => {
+    try {
+        const res = await axios.post('http://192.10.10.180:5000/Login', payload)
+        return res.data
+    } catch (error) {
+        return401(error)
     }
 }
 
@@ -78,6 +127,9 @@ const ExportedFunc = {
     Ubnt60ghz,
     SpeakSignal,
     Mikrotikreq,
-    Mikrotik60ghz
+    Mikrotik60ghz,
+    Find_Fail,
+    Login,
+    Nasdatavalue
 }
 export default ExportedFunc

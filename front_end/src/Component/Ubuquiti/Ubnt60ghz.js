@@ -12,7 +12,9 @@ const Ubnt60ghz = () => {
 
     useEffect(() => {
         const interva = setInterval(() => {
-            Axiosps.Ubnt60ghz().then(res => { setDataubnt(res) }).catch((err)=>console.log(err))
+            Axiosps.Ubnt60ghz().then(res => { 
+                console.log(res)
+                setDataubnt(res) }).catch((err)=>console.log(err))
         }, 5000)
         return () => {
             setDataubnt([])

@@ -1,9 +1,11 @@
 #!/usr/bin/python3
+import json
 import routeros_api
 from .Ftpfiles1 import ftpDownload
 import os
 from pathlib import Path
 
+mikpasswd = os.environ.get('mikpaswd')
 
 def Signal(text):
     getcurend = os.path.realpath(__file__)
@@ -41,7 +43,8 @@ def Resultend(text):
 
 
 def CostumeInfo(ip):
-    R1s = routeros_api.Api(ip, "admin", 'password')
+    ip = ip["Ipadress"]
+    R1s = routeros_api.Api(ip, "admin", mikpasswd)
     ppoename = R1s.talk('/interface/pppoe-client/print')[0]['user']
     signal = R1s.talk('/interface/wireless/print')[0]
     signals = R1s.talk(
@@ -55,14 +58,13 @@ def CostumeInfo(ip):
             "sig3": sinyal['tx-signal-strength-ch0'],
             "sig4": sinyal['tx-signal-strength-ch1'],
             "radioname": sinyal['radio-name'],
-
         })
-    return affet
+    return json.dumps(affet)
 
 
 def Signalscan(ip):
-    R1 = routeros_api.Api(ip, "admin", 'password')
+    R1 = routeros_api.Api(ip, "admin", mikpasswd)
     ppoename = R1.talk('/interface/pppoe-client/print')[0]['user']
     R1.talk('/interface/wireless/scan\n=number=wlan1\n=duration=45\n=save-file='+ppoename+'.txt')
-    ftpDownload(ppoename+".txt", ip)
-    return Resultend(ppoename+".txt")
+    ftpDownload(ppoename+".txt", ip,mikpasswd)
+    return json.dumps(Resultend(ppoename+".txt"))
