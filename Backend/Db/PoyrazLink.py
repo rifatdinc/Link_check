@@ -134,10 +134,10 @@ class Poyrazdb:
 
     def IssmanagerRadius(self, data):
         connector = mysql.connector.connect(
-            host="31.145.42.4",
-            user="uzak",
-            password="123456+aA",
-            db="radius",
+            host=os.environ.get("host"),
+            user=os.environ.get("user"),
+            password=os.environ.get("linpaswd"),
+            db=os.environ.get("db_rad"),
             auth_plugin="mysql_native_password",
         )
         cursor = connector.cursor()
@@ -149,10 +149,10 @@ class Poyrazdb:
 
     def LoginPage(self,data):
         connector = mysql.connector.connect(
-            host="31.145.42.3",
-            user="uzak",
-            password="123456+aA",
-            db="poyrazwi_wifi41",
+            host=os.environ.get("host1"),
+            user=os.environ.get("linpaswd1"),
+            password=os.environ.get("linpaswd"),
+            db=os.environ.get("poyraz"),
             auth_plugin="mysql_native_password",
         )
         cursor = connector.cursor()
